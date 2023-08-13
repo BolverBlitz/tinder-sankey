@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    html {
+      height: 100%;
+    }
+
+    body {
+      background-color: #b9e7fa;
+    }
+
+    /* Drop Zone */
+    #drop_zone {
+      width: 600px !important;
+      padding: 10px 20px !important;
+      border: #275efe 2px dashed;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+      color: green;
+    }
+  </style>
+</head>
+<body class="center">
+  <div id="chart"></div>
+  <div
+    class="center"
+    id="drop_zone"
+    ondrop="dropHandler(event);"
+    ondragover="dragOverHandler(event);">
+    <p>Ziehe die "data.json" Datei <i>hier</i> her um Sie zu verarbeiten.</p>
+  </div>
+</body>
+<script src="https://cdn.plot.ly/plotly-2.25.2.min.js"></script>
+<script>
+  const dragOverHandler = (event) => event.preventDefault();
+  const sumValues = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
+  const dropHandler = (event) => {
+    event.preventDefault();
+    for (const file of event.dataTransfer.files) {
+      const reader = new FileReader();
+      reader.onload = function (ev) {
+        const { Usage } = JSON.parse(ev.target.result);
+        const {
+          matches,
+          messages_received,
+          messages_sent,
+          superlikes,
+          swipes_likes,
+          swipes_passes,
+        } = Usage;
+        const totalSwipes_num =
+          sumValues(swipes_likes) + sumValues(swipes_passes);
+        const swipes_passes_num = sumValues(swipes_passes);
+        const swipes_likes_num = sumValues(swipes_likes);
+        const superlikes_num = sumValues(superlikes);
+        const matches_num = sumValues(matches);
+        const messages_received_num = sumValues(messages_received);
+        const messages_sent_num = sumValues(messages_sent);
+
+        const layout = {
+          title: "Tinder Data Visualization",
+          width: window.innerWidth,
+          height: window.innerHeight,
+          font: {
+            size: 14,
+          },
+        };
+
+        const data = [
+          {
+            type: "sankey",
+            orientation: "h",
+
+            node: {
+              pad: 150,
+              thickness: 50,
+              line: {
+                color: "black",
+                width: 0.4,
+              },
+              label: [
+                "Total Swipes",
+                "Passes",
+                "Likes",
+                "Matches",
+                "Superlikes",
+                "Msg Sent",
+                "Msg Received",
+              ],
+              color: [
+                "#3498db",
+                "#e74c3c",
+                "#2ecc71",
+                "#f1c40f",
+                "#9b59b6",
+                "#e67e22",
+                "#1abc9c",
+              ],
+            },
+
+            link: {
+              color: "rgba(50, 50, 50, 0.4)",
+              source: [0, 0, 2, 2, 3, 3],
+              target: [1, 2, 3, 4, 5, 6],
+              value: [
+                swipes_passes_num,
+                swipes_likes_num,
+                matches_num,
+                superlikes_num,
+                messages_sent_num,
+                messages_received_num,
+              ],
+            },
+          },
+        ];
+
+        Plotly.react("chart", data, layout);
+      };
+      document.getElementById("drop_zone").style.display = "none"; // Hide the drop zone
+      reader.readAsText(file); // Read the file
+    }
+  };
+</script>
