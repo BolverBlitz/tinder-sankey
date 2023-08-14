@@ -143,7 +143,7 @@ const genCharts = (swipes_passes_num, swipes_likes_num, superlikes_num, matches_
             "darkred",
         ];
     } else {
-        sankey_data_source = [0, 0, 2, 3, 3, 4, 5, 4, 5, 7];
+        sankey_data_source = [0, 0, 2, 3, 3, 4, 5, 6, 6, 7];
         sankey_data_target = [1, 2, 3, 4, 5, 6, 6, 7, 7, 8];
         sankey_data_value = [
             swipes_passes_num,
