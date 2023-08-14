@@ -59,7 +59,7 @@ const generateURLWithBase64 = (Usage) => {
     const encodedData = btoa(encodeURIComponent(jsonString));
 
     console.log(`${baseURL}?data=${encodedData}`)
-    window.location = `${baseURL}?data=${encodedData}`;
+    history.pushState({}, null, `${baseURL}?data=${encodedData}`);
 }
 
 const getValuesFromBase64URL = () => {
