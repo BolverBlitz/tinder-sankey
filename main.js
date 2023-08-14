@@ -27,7 +27,7 @@ const showMessageChart = () => {
 };
 
 const shareData = () => {
-    const data = localStorage.get('shareData');
+    const data = localStorage.getItem('shareData');
     // Copy to clipboard
     navigator.clipboard.writeText(data);
     // Edit button text
@@ -70,7 +70,7 @@ const generateURLWithBase64 = (Usage) => {
     const jsonString = JSON.stringify(data);
     const encodedData = btoa(encodeURIComponent(jsonString));
 
-    localStorage.set('shareData', `${baseURL}?data=${encodedData}`);
+    localStorage.setItem('shareData', `${baseURL}?data=${encodedData}`);
 }
 
 const getValuesFromBase64URL = () => {
