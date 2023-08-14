@@ -26,6 +26,18 @@ const showMessageChart = () => {
     document.getElementById("message_chart").style.display = "block";
 };
 
+const shareData = () => {
+    const data = localStorage.get('shareData');
+    // Copy to clipboard
+    navigator.clipboard.writeText(data);
+    // Edit button text
+    document.getElementById("click_share").innerHTML = "Copied!";
+
+    setTimeout(() => {
+        document.getElementById("click_share").innerHTML = "Click to share";
+    }, 2000);
+};
+
 const dragOverHandler = (event) => event.preventDefault();
 const sumValues = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
 
@@ -58,8 +70,7 @@ const generateURLWithBase64 = (Usage) => {
     const jsonString = JSON.stringify(data);
     const encodedData = btoa(encodeURIComponent(jsonString));
 
-    console.log(`${baseURL}?data=${encodedData}`)
-    history.pushState({}, null, `${baseURL}?data=${encodedData}`);
+    localStorage.set('shareData', `${baseURL}?data=${encodedData}`);
 }
 
 const getValuesFromBase64URL = () => {
@@ -316,6 +327,7 @@ const dropHandler = (event) => {
 
         // Show buttons
         document.getElementById("container").style.display = "block";
+        document.getElementById("container2").style.display = "block";
 
         // Hide Chart that are not on first page
         document.getElementById("pie_chart").style.display = "none";
