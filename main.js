@@ -56,15 +56,15 @@ const generateURLWithBase64 = (Usage) => {
     const baseURL = window.location.origin + window.location.pathname;
     const { matches, messages_received, messages_sent, superlikes, swipes_likes, swipes_passes } = Usage;
     const data = {
-        swipes_passes_num: sumValues(swipes_passes),
-        swipes_likes_num: sumValues(swipes_likes),
-        superlikes_num: sumValues(superlikes),
-        matches_num: Number(sumValues(matches)) - Number(document.getElementById("ad_match").value) || 0 + Number(document.getElementById("fake_match").value) || 0,
-        messages_received_num: sumValues(messages_received),
-        messages_sent_num: sumValues(messages_sent),
-        messages_total_num: Number(sumValues(messages_received)) + Number(sumValues(messages_sent)),
-        one_date: document.getElementById("one_date").value || 0,
-        multi_date: document.getElementById("multi_date").value || 0
+        a: sumValues(swipes_passes),
+        b: sumValues(swipes_likes),
+        c: sumValues(superlikes),
+        d: Number(sumValues(matches)) - Number(document.getElementById("ad_match").value) || 0 + Number(document.getElementById("fake_match").value) || 0,
+        e: sumValues(messages_received),
+        f: sumValues(messages_sent),
+        g: Number(sumValues(messages_received)) + Number(sumValues(messages_sent)),
+        h: document.getElementById("one_date").value || 0,
+        i: document.getElementById("multi_date").value || 0
     };
 
     const jsonString = JSON.stringify(data);
@@ -340,8 +340,6 @@ const dropHandler = (event) => {
 const dataFromURL = getValuesFromBase64URL();
 
 if (dataFromURL) {
-    const { matches_num, messages_received_num, messages_sent_num, superlikes_num, swipes_likes_num, swipes_passes_num, messages_total_num, one_date, multi_date } = dataFromURL;
-
     document.getElementById("drop_zone").style.display = "none"; // Hide the drop zone
     document.getElementById("formSettings").style.display = "none"; // Show the settings
 
@@ -356,6 +354,13 @@ if (dataFromURL) {
     // Hide buttons for time charts
     document.getElementById("ActivityChart").style.display = "none";
     document.getElementById("MessageChart").style.display = "none";
+    if ('swipes_passes_num' in dataFromURL) {
+        const { matches_num, messages_received_num, messages_sent_num, superlikes_num, swipes_likes_num, swipes_passes_num, messages_total_num, one_date, multi_date } = dataFromURL;
 
-    genCharts(swipes_passes_num, swipes_likes_num, superlikes_num, matches_num, messages_sent_num, messages_received_num, messages_total_num, one_date, multi_date);
+        genCharts(swipes_passes_num, swipes_likes_num, superlikes_num, matches_num, messages_sent_num, messages_received_num, messages_total_num, one_date, multi_date);
+    } else {
+        const { a, b, c, d, e, f, g, h, i } = dataFromURL
+        console.log(dataFromURL)
+        genCharts(a, b, c, d, e, f, g, h, i)
+    }
 }
