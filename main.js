@@ -223,14 +223,7 @@ const genCharts = (swipes_passes_num, swipes_likes_num, superlikes_num, matches_
                 "First Date",
                 "More Dates",
             ],
-            values: [
-                swipes_passes_num,
-                swipes_likes_num,
-                superlikes_num,
-                matches_num,
-                one_date,
-                multi_date,
-            ],
+            values: [],
             textinfo: "label+percent",
             insidetextorientation: "radial",
             hole: 0.3, // Für ein Donut-Diagramm; entfernen oder auf 0 setzen für ein volles Kreisdiagramm
@@ -246,6 +239,13 @@ const genCharts = (swipes_passes_num, swipes_likes_num, superlikes_num, matches_
             },
         },
     ];
+
+    if(swipes_passes_num > 0) pie_data[0].values.push(swipes_passes_num);
+    if(swipes_likes_num > 0) pie_data[0].values.push(swipes_likes_num);
+    if(superlikes_num > 0) pie_data[0].values.push(superlikes_num);
+    if(matches_num > 0) pie_data[0].values.push(matches_num);
+    if(one_date > 0) pie_data[0].values.push(one_date);
+    if(multi_date > 0) pie_data[0].values.push(multi_date);
 
     if (Usage) {
         const { matches, messages_received, messages_sent, superlikes, swipes_likes, swipes_passes } = Usage;
